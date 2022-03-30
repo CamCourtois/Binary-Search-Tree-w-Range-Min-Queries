@@ -1,5 +1,10 @@
 
 package bst;
+import java.io.Console;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.*;
+
 
 /**
  *
@@ -7,25 +12,53 @@ package bst;
  */
 public class BST {
     
-    public static void main(String[] args) 
+    public static void main(String[] args) throws FileNotFoundException
     {
         BST theTree = new BST();
-        theTree.insertNode(2, 31);
-        theTree.insertNode(3, 24);
-        theTree.insertNode(1, 11);
-        theTree.insertNode(4, 4);
-      
+        String[] bstInstructions;
+        String instructionLine;
+
+        File inputFile = new File("inputFile.txt");
+        Scanner in = new Scanner(inputFile);
+        String numLines;
+        numLines = in.nextLine();
+        int numInstructions = Integer.parseInt(numLines);
+
         Integer[] minData = new Integer[1]; 
         minData[0] = null;
-        theTree.rangeReport(theTree.root, 2, 3, minData);
+
+        for(int i = 0; i < numInstructions; i++)
+        {
+            instructionLine = in.nextLine();
+            bstInstructions = instructionLine.split(" ");
+            if(bstInstructions[0].equalsIgnoreCase("IN")){
+                int newKey = Integer.parseInt(bstInstructions[1]);
+                int newData = Integer.parseInt(bstInstructions[2]);
+
+                theTree.insertNodeOne(newKey, newData, minData);
+            }
+            else
+            {
+                int key1 = Integer.parseInt(bstInstructions[1]);
+                int key2 = Integer.parseInt(bstInstructions[2]);
+
+//                minData[0] = null;
+                theTree.rangeReportOne(theTree.root,key1,key2,minData);
+                System.out.println(minData[0]);
+
+            }
+
+
+        }
 
     }
-    
+
+
     Node root;
 
-    public void insertNode(int key, int data){
+    public void insertNodeOne(int key, int data, Integer[] minData){
 
-        Node newNode = new Node(key, data);
+        Node newNode = new Node(key, data, minData);
         
         if(root == null){
             root = newNode;
@@ -44,6 +77,9 @@ public class BST {
                     
                     if(currentNode == null){
                         parent.left = newNode;
+                        if(parent.data < parent.left.data){
+                            parent.left.localMinData = parent.data;
+                        }
                         return;
                     }
                 }
@@ -53,6 +89,9 @@ public class BST {
                     
                     if(currentNode == null){
                         parent.right = newNode;
+                        if(parent.data < parent.right.data){
+                            parent.right.localMinData = parent.right.data;
+                        }
                         return;
                     }
                 }
@@ -62,13 +101,15 @@ public class BST {
         }
 
     }
-    public void rangeReport(Node currentNode, int key1, int key2, Integer[] minData)
-    {    
+    public void rangeReportOne(Node currentNode, int key1, int key2, Integer[] minData)
+    {
+
         if(currentNode == null)
             return;
         if (!(currentNode.key< key1))
-            rangeReport(currentNode.left,key1,key2, minData); 
+            rangeReportOne(currentNode.left,key1,key2, minData);
         if ((currentNode.key >= key1) && (currentNode.key <=key2)){
+
             if(minData[0] == null){
                 minData[0] = currentNode.data;
             }
@@ -77,33 +118,38 @@ public class BST {
                 minData[0] = currentNode.data;
                 
             }
-            
-            System.out.println(minData[0]);
+
+
         }
         if (!(currentNode.key > key2)){
-            rangeReport(currentNode.right, key1, key2, minData);
+            rangeReportOne(currentNode.right, key1, key2, minData);
         }
-        
-        
+
+
     }
-    
-    public void setMinData(){
-    
+    public void rangeReportTwo(int key, int data){
+
     }
-            
+
+
+
 }
 
 class Node
 {
     int key;
     int data;
+    Integer[] minData;
+    int localMinData;
     Node left;
     Node right;
     
 
-    public Node(int key, int data){
+    public Node(int key, int data, Integer[] minData){
         this.key = key;
         this.data = data;
+        this.minData = minData;
+        this.localMinData = data;
     }
 
 }
