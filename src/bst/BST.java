@@ -1,6 +1,5 @@
 
 package bst;
-import java.io.Console;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -13,12 +12,12 @@ import java.util.*;
 public class BST {
 
 
-
     public static void main(String[] args) throws FileNotFoundException
     {
         BST theTree = new BST();
         String[] bstInstructions;
         String instructionLine;
+
 
 
         File inputFile = new File("inputFile.txt");
@@ -29,6 +28,7 @@ public class BST {
 
         Integer[] minData = new Integer[1];
         minData[0] = null;
+        Node root =  new Node(null, null, minData);
 
 
         for(int i = 0; i < numInstructions; i++)
@@ -39,8 +39,16 @@ public class BST {
                 int newKey = Integer.parseInt(bstInstructions[1]);
                 int newData = Integer.parseInt(bstInstructions[2]);
 
-                theTree.insert(newKey, newData, minData);
-//                theTree.insertNodeOne(newKey, newData, minData);
+                if(i == 0) {
+
+                    Node newNode = new Node(newKey, newData, minData);
+                    theTree.insert(root, newNode);
+                }
+                else{
+                    Node newNode = new Node(newKey, newData, minData);
+                    theTree.insert(root, newNode);
+
+                }
 
             }
             else
@@ -50,7 +58,7 @@ public class BST {
 
 //                minData[0] = null;
 //              theTree.rangeReportOne(theTree.root,key1,key2,minData);
-                theTree.rangeReportTwo(key1, key2, theTree.root);
+                theTree.rangeReportTwo(key1, key2, root);
                 System.out.println(minData[0]);
 
             }
@@ -60,105 +68,32 @@ public class BST {
 
     }
 
+    public void insert(Node root, Node newNode){
 
-    Node root;
-    public void insert(int key, int data, Integer[] minData){
-        Node newNode = new Node(key, data, minData);
+        if(root.key == null){
 
-        if(root == null){
-            root = newNode;
+            root.data = newNode.data;
+            root.key = newNode.key;
             root.localMinData = root.data;
         }
-        else {
-                Node currentNode = root;
-                Node parent;
-
-                while(true){
-                    parent = currentNode;
-                    if(key < currentNode.key){
-                        currentNode = currentNode.left;
-
-                        if(currentNode == null){
-                            parent.left = newNode;
-                            root.localMinData = Math.min(root.localMinData, newNode.data);
-                        }
-                        return;
-                    }
-                    else
-                    {
-                        currentNode = currentNode.right;
-
-                        if(currentNode == null){
-                            parent.right = newNode;
-                            root.localMinData = Math.min(root.localMinData, newNode.data);
-//                        if(parent.data < parent.right.data){
-//                            parent.right.localMinData = parent.right.data;
-//
-//                        }
-                            return;
-                        }
-                    }
-                }
-//            if (root.key < newNode.key) {
-//                root.localMinData = Math.min(root.localMinData, newNode.data);
-//                insert(root.right, newNode);
-//            } else {
-//                root.localMinData = Math.min(root.localMinData, newNode.data);
-//                insert(root.left, newNode);
-//            }
-        }
+       else if (root.key < newNode.key)
+       {
+            root.localMinData = Math.min(root.localMinData, newNode.data);
+            if(root.right == null)
+                root.right = newNode;
+            else
+                insert(root.right, newNode);
+       }
+       else
+       {
+            root.localMinData = Math.min(root.localMinData, newNode.data);
+            if(root.left == null)
+                root.left = newNode;
+            else
+                insert(root.left, newNode);
+       }
     }
 
-//    Node root;
-    public void insertNodeOne(int key, int data, Integer[] minData){
-
-        Node newNode = new Node(key, data, minData);
-
-        if(root == null){
-            root = newNode;
-
-        }
-        else
-        {
-            Node currentNode = root;
-            Node parent;
-
-            while(true){
-                parent = currentNode;
-
-                if(key < currentNode.key){
-                    currentNode = currentNode.left;
-
-                    if(currentNode == null){
-                        parent.left = newNode;
-
-//                        if(parent.data < parent.left.data){
-//                            parent.left.localMinData = parent.data;
-//
-//                        }
-                        return;
-                    }
-                }
-                else
-                {
-                    currentNode = currentNode.right;
-
-                    if(currentNode == null){
-                        parent.right = newNode;
-
-//                        if(parent.data < parent.right.data){
-//                            parent.right.localMinData = parent.right.data;
-//
-//                        }
-                        return;
-                    }
-                }
-
-            }
-
-        }
-
-    }
     public void rangeReportOne(Node currentNode, int key1, int key2, Integer[] minData)
     {
 
@@ -185,8 +120,9 @@ public class BST {
 
 
     }
+
     int min;
-    public void rangeReportTwo(int key1, int key2, Node currentNode)
+    public void rangeReportTwo( int key1, int key2, Node currentNode)
     {
 
         while (!(key1 <= currentNode.key && currentNode.key <= key2)){
@@ -234,15 +170,15 @@ public class BST {
 
 class Node
 {
-    int key;
-    int data;
+    public Integer key;
+    public Integer data;
     Integer[] minData;
-    int localMinData;
-    Node left;
-    Node right;
+    public Integer localMinData;
+    public Node left;
+    public Node right;
     
 
-    public Node(int key, int data, Integer[] minData){
+    public Node(Integer key, Integer data, Integer[] minData){
         this.key = key;
         this.data = data;
         this.minData = minData;
