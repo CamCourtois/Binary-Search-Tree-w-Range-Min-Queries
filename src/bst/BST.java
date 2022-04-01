@@ -12,8 +12,7 @@ import java.util.*;
 public class BST {
 
 
-    public static void main(String[] args) throws FileNotFoundException
-    {
+    public static void main(String[] args) throws FileNotFoundException {
         BST theTree = new BST();
         String[] bstInstructions;
         String instructionLine;
@@ -28,70 +27,62 @@ public class BST {
 
         Integer[] minData = new Integer[1];
         minData[0] = null;
-        Node root =  new Node(null, null, minData);
 
 
-        for(int i = 0; i < numInstructions; i++)
-        {
+        for (int i = 0; i < numInstructions; i++) {
             instructionLine = in.nextLine();
             bstInstructions = instructionLine.split(" ");
-            if(bstInstructions[0].equalsIgnoreCase("IN")){
+            if (bstInstructions[0].equalsIgnoreCase("IN")) {
                 int newKey = Integer.parseInt(bstInstructions[1]);
                 int newData = Integer.parseInt(bstInstructions[2]);
 
-                if(i == 0) {
+                theTree.root = theTree.insert(theTree.root, newKey, newData, minData);
 
-                    Node newNode = new Node(newKey, newData, minData);
-                    theTree.insert(root, newNode);
-                }
-                else{
-                    Node newNode = new Node(newKey, newData, minData);
-                    theTree.insert(root, newNode);
+            } else {
 
-                }
-
-            }
-            else
-            {
                 int key1 = Integer.parseInt(bstInstructions[1]);
                 int key2 = Integer.parseInt(bstInstructions[2]);
 
 //                minData[0] = null;
 //              theTree.rangeReportOne(theTree.root,key1,key2,minData);
-                theTree.rangeReportTwo(key1, key2, root);
-                System.out.println(minData[0]);
+//              System.out.println(minData[0]);
+//                theTree.inOrderTraversal(theTree.root);
+                theTree.rangeReportTwo(key1, key2, theTree.root);
+                System.out.println(min);
 
             }
-
-
         }
-
     }
 
-    public void insert(Node root, Node newNode){
+    public void inOrderTraversal(Node currentNode) {
+        if (currentNode != null) {
+            inOrderTraversal(currentNode.left);
 
-        if(root.key == null){
+            System.out.println("Key: " + currentNode.key + " LocalMinData: " + currentNode.localMinData);
 
-            root.data = newNode.data;
-            root.key = newNode.key;
-            root.localMinData = root.data;
+            inOrderTraversal(currentNode.right);
         }
-       else if (root.key < newNode.key)
-       {
-            root.localMinData = Math.min(root.localMinData, newNode.data);
-            if(root.right == null)
-                root.right = newNode;
-            else
-                insert(root.right, newNode);
-       }
-       else
-       {
-            root.localMinData = Math.min(root.localMinData, newNode.data);
-            if(root.left == null)
-                root.left = newNode;
-            else
-                insert(root.left, newNode);
-       }
+    }
+
+
+    Node root;
+
+    public Node insert(Node root, int key, int data, Integer[] minData) {
+        if (root == null) {
+            root = new Node(key, data, minData);
+
+            return root;
+        }
+        if (key < root.key) {
+            root.left = insert(root.left, key, data, minData);
+            root.localMinData = Math.min(root.left.localMinData, root.localMinData);
+        }
+        else
+        {
+            root.right = insert(root.right, key, data, minData);
+            root.localMinData = Math.min(root.right.localMinData, root.localMinData);
+        }
+        return root;
     }
 
     public void rangeReportOne(Node currentNode, int key1, int key2, Integer[] minData)
@@ -121,7 +112,7 @@ public class BST {
 
     }
 
-    int min;
+    public static int min;
     public void rangeReportTwo( int key1, int key2, Node currentNode)
     {
 
@@ -131,8 +122,10 @@ public class BST {
             else
                 currentNode = currentNode.right;
         }
+
         min = currentNode.data;
         rangeMinRight(key1, currentNode.left);
+
         rangeMinLeft(key2, currentNode.right);
 
     }
@@ -145,8 +138,13 @@ public class BST {
         else if(key1 > currentNode.key){
             rangeMinRight(key1, currentNode.right);
         }
-        else
-            min = minOfThree(min, currentNode.data, currentNode.right.localMinData);
+        else {
+            if (currentNode.right != null)
+                min = minOfThree(min, currentNode.data, currentNode.right.localMinData);
+            else {
+                min = Math.min(min, currentNode.data);
+            }
+        }
     }
     public void rangeMinLeft(int key2, Node currentNode){
         if(key2 < currentNode.key){
@@ -154,10 +152,17 @@ public class BST {
             rangeMinLeft(key2, currentNode.left);
         }
         else if(key2 > currentNode.key){
-            rangeMinLeft(key2, currentNode.right);
+            if(currentNode.right!= null)
+                rangeMinLeft(key2, currentNode.right);
+            else
+                return;
         }
-        else
-            min = minOfThree(min, currentNode.data, currentNode.left.localMinData);
+        else{
+            if(currentNode.left != null)
+                min = minOfThree(min, currentNode.data, currentNode.left.localMinData);
+            else
+                min = Math.min(min, currentNode.data);
+        }
 
     }
 
@@ -170,15 +175,15 @@ public class BST {
 
 class Node
 {
-    public Integer key;
-    public Integer data;
+    public int key;
+    public int data;
     Integer[] minData;
-    public Integer localMinData;
+    public int localMinData;
     public Node left;
     public Node right;
     
 
-    public Node(Integer key, Integer data, Integer[] minData){
+    public Node(int key, int data, Integer[] minData){
         this.key = key;
         this.data = data;
         this.minData = minData;
