@@ -44,13 +44,13 @@ public class BST {
                 int key2 = Integer.parseInt(bstInstructions[2]);
 
 //                minData[0] = null;
-//              theTree.rangeReportOne(theTree.root,key1,key2,minData);
-//              System.out.println(minData[0]);
-//                theTree.inOrderTraversal(theTree.root);
                 theTree.rangeReportTwo(key1, key2, theTree.root);
 
             }
+            else
+                return;
         }
+
         System.out.println(min);
     }
     public void inOrderTraversal(Node root)
@@ -113,11 +113,12 @@ public class BST {
     public void rangeReportTwo( int key1, int key2, Node currentNode)
     {
     if (currentNode != null) {
-        while (!(key1 <= currentNode.key && currentNode.key <= key2)) {
-            if (key1 < currentNode.key && key2 < currentNode.key)
+        while (!((key1 <= currentNode.key) && (currentNode.key <= key2))) {
+            if ((key1 < currentNode.key) && (key2 < currentNode.key)){
                 currentNode = currentNode.left;
-            else
+            } else {
                 currentNode = currentNode.right;
+            }
         }
 
         min = currentNode.data;
@@ -134,7 +135,7 @@ public class BST {
         }
         else if(key1 < currentNode.key){
             if(currentNode.right != null) {
-                min = minOfThree(min, currentNode.data, currentNode.right.localMinData);
+                min = Math.min(min, currentNode.right.localMinData);
                 rangeMinRight(key1, currentNode.left);
             }
             else{
@@ -147,7 +148,7 @@ public class BST {
         }
         else {
             if(currentNode.right != null){
-                min = minOfThree(min, currentNode.data, currentNode.right.localMinData);
+                min = Math.min(min, currentNode.right.localMinData);
             }
             else
                 min = Math.min(min, currentNode.data);
@@ -159,7 +160,7 @@ public class BST {
         }
         else if (key2 > currentNode.key) {
             if(currentNode.left != null) {
-                min = minOfThree(min, currentNode.data, currentNode.left.localMinData);
+                min = Math.min(min, currentNode.left.localMinData);
                 rangeMinLeft(key2, currentNode.right);
             }
             else{
@@ -172,7 +173,7 @@ public class BST {
         }
         else{
             if(currentNode.left != null)
-                min = minOfThree(min, currentNode.data, currentNode.left.localMinData);
+                min = Math.min(min, currentNode.left.localMinData);
             else
                 min = Math.min(min, currentNode.data);
         }
