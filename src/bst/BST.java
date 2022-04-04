@@ -53,17 +53,14 @@ public class BST {
             }
         }
     }
-
-    public void inOrderTraversal(Node currentNode) {
-        if (currentNode != null) {
-            inOrderTraversal(currentNode.left);
-
-            System.out.println("Key: " + currentNode.key + " LocalMinData: " + currentNode.localMinData);
-
-            inOrderTraversal(currentNode.right);
-        }
+    public void inOrderTraversal(Node root)
+    {
+        if(root == null)
+            return;
+        inOrderTraversal(root.left);
+        System.out.println("Key "+root.key+" LocalMinData "+root.localMinData);
+        inOrderTraversal(root.right);
     }
-
 
     Node root;
 
@@ -124,38 +121,54 @@ public class BST {
         }
 
         min = currentNode.data;
-        rangeMinRight(key1, currentNode.left);
 
+        rangeMinRight(key1, currentNode.left);
+        System.out.println(currentNode.key);
         rangeMinLeft(key2, currentNode.right);
 
     }
     public void rangeMinRight(int key1, Node currentNode)
     {
-        if(key1 < currentNode.key){
-            min = minOfThree(min, currentNode.data, currentNode.right.localMinData);
-            rangeMinRight(key1, currentNode.left);
+        if(currentNode == null){
+            return;
+        }
+        else if(key1 < currentNode.key){
+            if(currentNode.right != null) {
+                min = minOfThree(min, currentNode.data, currentNode.right.localMinData);
+                rangeMinRight(key1, currentNode.left);
+            }
+            else{
+                min = Math.min(min, currentNode.data);
+                rangeMinRight(key1, currentNode.left);
+            }
         }
         else if(key1 > currentNode.key){
-            rangeMinRight(key1, currentNode.right);
+                rangeMinRight(key1, currentNode.right);
         }
         else {
-            if (currentNode.right != null)
+            if(currentNode.right != null){
                 min = minOfThree(min, currentNode.data, currentNode.right.localMinData);
-            else {
-                min = Math.min(min, currentNode.data);
             }
+            else
+                min = Math.min(min, currentNode.data);
         }
     }
     public void rangeMinLeft(int key2, Node currentNode){
-        if(key2 < currentNode.key){
-            min = minOfThree(min, currentNode.data, currentNode.left.localMinData);
-            rangeMinLeft(key2, currentNode.left);
+        if(currentNode == null) {
+            return;
         }
-        else if(key2 > currentNode.key){
-            if(currentNode.right!= null)
+        else if (key2 > currentNode.key) {
+            if(currentNode.left != null) {
+                min = minOfThree(min, currentNode.data, currentNode.left.localMinData);
                 rangeMinLeft(key2, currentNode.right);
-            else
-                return;
+            }
+            else{
+                min = Math.min(min, currentNode.data);
+                rangeMinLeft(key2, currentNode.right);
+            }
+        }
+        else if(key2 < currentNode.key){
+                rangeMinLeft(key2, currentNode.left);
         }
         else{
             if(currentNode.left != null)
