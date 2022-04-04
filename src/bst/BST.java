@@ -38,7 +38,7 @@ public class BST {
 
                 theTree.root = theTree.insert(theTree.root, newKey, newData, minData);
 
-            } else {
+            } else if(bstInstructions[0].equalsIgnoreCase("RMQ")){
 
                 int key1 = Integer.parseInt(bstInstructions[1]);
                 int key2 = Integer.parseInt(bstInstructions[2]);
@@ -48,10 +48,10 @@ public class BST {
 //              System.out.println(minData[0]);
 //                theTree.inOrderTraversal(theTree.root);
                 theTree.rangeReportTwo(key1, key2, theTree.root);
-                System.out.println(min);
 
             }
         }
+        System.out.println(min);
     }
     public void inOrderTraversal(Node root)
     {
@@ -123,7 +123,6 @@ public class BST {
         min = currentNode.data;
 
         rangeMinRight(key1, currentNode.left);
-        System.out.println(currentNode.key);
         rangeMinLeft(key2, currentNode.right);
 
     }
