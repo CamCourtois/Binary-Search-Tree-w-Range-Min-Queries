@@ -112,9 +112,9 @@ public class BST {
     public static int min;
     public void rangeReportTwo( int key1, int key2, Node currentNode)
     {
-
-        while (!(key1 <= currentNode.key && currentNode.key <= key2)){
-            if(key1 < currentNode.key && key2 < currentNode.key)
+    if (currentNode != null) {
+        while (!(key1 <= currentNode.key && currentNode.key <= key2)) {
+            if (key1 < currentNode.key && key2 < currentNode.key)
                 currentNode = currentNode.left;
             else
                 currentNode = currentNode.right;
@@ -124,6 +124,7 @@ public class BST {
 
         rangeMinRight(key1, currentNode.left);
         rangeMinLeft(key2, currentNode.right);
+    }
 
     }
     public void rangeMinRight(int key1, Node currentNode)
