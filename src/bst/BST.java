@@ -13,45 +13,75 @@ public class BST {
 
 
     public static void main(String[] args) throws FileNotFoundException {
-        BST theTree = new BST();
-        String[] bstInstructions;
-        String instructionLine;
-
-
-
-        File inputFile = new File("inputFile.txt");
-        Scanner in = new Scanner(inputFile);
-        String numLines;
-        numLines = in.nextLine();
-        int numInstructions = Integer.parseInt(numLines);
+        BST theTree1 = new BST();
+        BST theTree2 = new BST();
+        BST theTree3 = new BST();
+//        String[] bstInstructions;
+//        String instructionLine;
+//
+//
+//
+//        File inputFile = new File("inputFile.txt");
+//        Scanner in = new Scanner(inputFile);
+//        String numLines;
+//        numLines = in.nextLine();
+//        int numInstructions = Integer.parseInt(numLines);
 
         Integer[] minData = new Integer[1];
         minData[0] = null;
 
 
-        for (int i = 0; i < numInstructions; i++) {
-            instructionLine = in.nextLine();
-            bstInstructions = instructionLine.split(" ");
-            if (bstInstructions[0].equalsIgnoreCase("IN")) {
-                int newKey = Integer.parseInt(bstInstructions[1]);
-                int newData = Integer.parseInt(bstInstructions[2]);
 
-                theTree.root = theTree.insert(theTree.root, newKey, newData, minData);
+//        for (int i = 0; i < numInstructions; i++) {
+//            instructionLine = in.nextLine();
+//            bstInstructions = instructionLine.split(" ");
+//            if (bstInstructions[0].equalsIgnoreCase("IN")) {
+//                int newKey = Integer.parseInt(bstInstructions[1]);
+//                int newData = Integer.parseInt(bstInstructions[2]);
+//
+//                theTree.root = theTree.insert(theTree.root, newKey, newData, minData);
+//
+//            } else if(bstInstructions[0].equalsIgnoreCase("RMQ")){
+//
+//                int key1 = Integer.parseInt(bstInstructions[1]);
+//                int key2 = Integer.parseInt(bstInstructions[2]);
+//
+//                theTree.rangeReportOne(theTree.root, key1, key2, minData);
+//                theTree.rangeReportTwo(key1, key2, theTree.root);
+//
+//            }
+//            else
+//                return;
+//        }
+        Random rand = new Random();
 
-            } else if(bstInstructions[0].equalsIgnoreCase("RMQ")){
-
-                int key1 = Integer.parseInt(bstInstructions[1]);
-                int key2 = Integer.parseInt(bstInstructions[2]);
-
-//                minData[0] = null;
-                theTree.rangeReportTwo(key1, key2, theTree.root);
-
-            }
-            else
-                return;
+        double start = System.currentTimeMillis();
+        for(int i = 0; i <= 3000; i++){
+            int newKey = rand.nextInt(32767);
+            int newData = rand.nextInt(32767);
+            theTree1.root = theTree1.insert(theTree1.root, newKey, newData, minData);
         }
+        double elapsed = System.currentTimeMillis() - start;
+        System.out.printf(" time to build tree 1: %.4f ms\n", elapsed);
 
-        System.out.println(min);
+        start = System.currentTimeMillis();
+        for(int i = 0; i <= 10000; i++){
+            int newKey = rand.nextInt(32767);
+            int newData = rand.nextInt(32767);
+            theTree2.root = theTree2.insert(theTree2.root, newKey, newData, minData);
+        }
+        elapsed = System.currentTimeMillis() - start;
+        System.out.printf(" time to build tree 2: %.4f ms\n", elapsed);
+
+        start = System.currentTimeMillis();
+        for(int i = 0; i <= 30000; i++){
+            int newKey = rand.nextInt(32767);
+            int newData = rand.nextInt(32767);
+            theTree1.root = theTree1.insert(theTree1.root, newKey, newData, minData);
+        }
+        elapsed = System.currentTimeMillis() - start;
+        System.out.printf(" time to build tree 3: %.4f ms\n", elapsed);
+
     }
     public void inOrderTraversal(Node root)
     {
@@ -65,6 +95,7 @@ public class BST {
     Node root;
 
     public Node insert(Node root, int key, int data, Integer[] minData) {
+
         if (root == null) {
             root = new Node(key, data, minData);
 
