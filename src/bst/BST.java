@@ -1,5 +1,5 @@
 
-package bst;
+//package bst;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -93,7 +93,6 @@ public class BST {
     }
 
     Node root;
-
     public Node insert(Node root, int key, int data, Integer[] minData) {
 
         if (root == null) {
@@ -115,7 +114,6 @@ public class BST {
 
     public void rangeReportOne(Node currentNode, int key1, int key2, Integer[] minData)
     {
-
         if(currentNode == null)
             return;
         if (!(currentNode.key< key1))
@@ -130,14 +128,10 @@ public class BST {
                 minData[0] = currentNode.data;
 
             }
-
-
         }
         if (!(currentNode.key > key2)){
             rangeReportOne(currentNode.right, key1, key2, minData);
         }
-
-
     }
 
     public static int min;
@@ -210,12 +204,6 @@ public class BST {
         }
 
     }
-
-    public int minOfThree(int num1, int num2, int num3) {
-        return Math.min(Math.min(num1, num2), num3);
-    }
-
-
 }
 
 class Node
