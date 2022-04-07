@@ -11,8 +11,9 @@ import java.util.*;
  */
 public class BST {
 
-
+    Node root;
     public static void main(String[] args) throws FileNotFoundException {
+
         BST theTree1 = new BST();
         BST theTree2 = new BST();
         BST theTree3 = new BST();
@@ -77,10 +78,32 @@ public class BST {
         for(int i = 0; i <= 30000; i++){
             int newKey = rand.nextInt(32767);
             int newData = rand.nextInt(32767);
-            theTree1.root = theTree1.insert(theTree1.root, newKey, newData, minData);
+            theTree3.root = theTree3.insert(theTree3.root, newKey, newData, minData);
         }
         elapsed = System.currentTimeMillis() - start;
         System.out.printf(" time to build tree 3: %.4f ms\n", elapsed);
+
+        //RMQs on Tree 1
+        System.out.println("RMQ's on Tree 1");
+        start = System.currentTimeMillis();
+        for(int i = 0; i <= 1000; i++){
+            int key1 = rand.nextInt(32767);
+            int key2 = rand.nextInt(32767);
+            theTree1.rangeReportOne(key1, key2, theTree1.root, minData);
+        }
+        elapsed = System.currentTimeMillis() - start;
+        System.out.printf("Random RMQs using Method 1: %.4f ms", elapsed);
+//
+//        start = System.currentTimeMillis();
+//        for(int i = 0; i <= 1000; i++){
+//            int key1 = rand.nextInt(32767);
+//            int key2 = rand.nextInt(32767);
+//            theTree1.rangeReportTwo(key1, key2, theTree1.root);
+//        }
+//        elapsed = System.currentTimeMillis() - start;
+//        System.out.printf("Random RMQs using Method 2 %.4f", elapsed);
+
+
 
     }
     public void inOrderTraversal(Node root)
@@ -92,7 +115,7 @@ public class BST {
         inOrderTraversal(root.right);
     }
 
-    Node root;
+
     public Node insert(Node root, int key, int data, Integer[] minData) {
 
         if (root == null) {
@@ -112,14 +135,13 @@ public class BST {
         return root;
     }
 
-    public void rangeReportOne(Node currentNode, int key1, int key2, Integer[] minData)
+    public void rangeReportOne(int key1, int key2, Node currentNode, Integer[] minData)
     {
         if(currentNode == null)
             return;
         if (!(currentNode.key< key1))
-            rangeReportOne(currentNode.left,key1,key2, minData);
+            rangeReportOne(key1,key2, currentNode.left, minData);
         if ((currentNode.key >= key1) && (currentNode.key <=key2)){
-
             if(minData[0] == null){
                 minData[0] = currentNode.data;
             }
@@ -130,8 +152,9 @@ public class BST {
             }
         }
         if (!(currentNode.key > key2)){
-            rangeReportOne(currentNode.right, key1, key2, minData);
+            rangeReportOne(key1, key2,currentNode.right, minData);
         }
+
     }
 
     public static int min;
